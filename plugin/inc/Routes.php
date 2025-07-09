@@ -6,27 +6,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Routes
-{
-    public static function init(): void
-    {
+class Routes {
+    public static function init(): void {
         /**
-        * CORS configuration.
-        */
-        $origins = getenv('ORIGINS');
-        add_action('init', function () {
-            if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS' && $origins !== false) {
-                header('Access-Control-Allow-Origin: ' . $origins);
-                header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-                header('Access-Control-Allow-Headers: Content-Type');
-                header('Access-Control-Allow-Credentials: true');
-                http_response_code(200);
-            }
-        }, 15);
-
-        /**
-        * Register endpoint.
-        */
+         * Register endpoint.
+         */
         add_action('rest_api_init', function () {
             register_rest_route('gfl/v1', '/subscribe', array(
                 'methods' => ['OPTIONS', 'POST'],
@@ -36,8 +20,7 @@ class Routes
         });
     }
 
-    public static function handle_signup($request)
-    {
+    public static function handle_signup($request) {
         global $wpdb;
 
         $params = $request->get_json_params();
@@ -54,9 +37,9 @@ class Routes
 
         $table = $wpdb->prefix . 'goodfoodloob';
         $wpdb->insert($table, [
-          'email' => $email,
-          'name' => $name,
-          'form' => $form
+            'email' => $email,
+            'name' => $name,
+            'form' => $form
         ]);
 
         return new \WP_REST_Response([
