@@ -3,9 +3,11 @@ import React from 'react';
 export interface Post {
     id: number;
     title: { rendered: string };
+    content: { rendered: string };
     excerpt: { rendered: string };
     slug: string;
     type: string;
+    date_gmt: string;
     _embedded: {
         'wp:featuredmedia': [
             {

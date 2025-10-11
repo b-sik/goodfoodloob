@@ -1,5 +1,8 @@
+import './blog.css';
 import { fetchPost, fetchPosts } from '@/lib/api';
 import type { Post } from '@/lib/types';
+import { humanReadableDate } from '@/lib/util';
+import Link from 'next/link';
 
 export async function generateStaticParams() {
     const blogPosts: Post[] = await fetchPosts('posts', 100);
@@ -23,9 +26,38 @@ export default async function BlogPage({
     const { id, type } = await params;
     const post = await fetchPost(id, type);
 
+    console.log({ post });
+
     return (
-        <main>
-            <section>{post?.title.rendered}</section>
+        <main className='bg-gfl-white'>
+            {post ? (
+                <section className='min-h-[calc(100vh-80px)] text-center p-10 md:p-20 flex flex-col justify-center align-middle'>
+                    <h1 className='text-5xl'>{post.title.rendered}</h1>
+                    <div className='mb-8'>
+                        <small>{humanReadableDate(post.date_gmt)}</small> |{' '}
+                        <small>
+                            <Link
+                                href={`/blog/${type}`}
+                                className='hover:text-gfl-link-green'
+                            >
+                                {type}
+                            </Link>
+                        </small>
+                    </div>
+                    <div className='max-h-[400px] mb-14'>
+                        <img
+                            src={`${post?._embedded['wp:featuredmedia'][0].source_url}`}
+                            className='max-h-100 h-[400px] max-w-100 m-auto'
+                        />
+                    </div>
+                    <div
+                        className='text-left'
+                        dangerouslySetInnerHTML={{
+                            __html: post?.content.rendered ?? '',
+                        }}
+                    ></div>
+                </section>
+            ) : null}
         </main>
     );
 }

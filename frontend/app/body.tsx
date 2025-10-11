@@ -89,7 +89,17 @@ export default function Body({
                     <span className='hidden lg:inline-block'>
                         &nbsp;|&nbsp;
                     </span>
-                    <p>Built by bsik.net | Designed by Lubna Sarigat</p>
+                    <p>
+                        Built by{' '}
+                        <a
+                            href='bsik'
+                            target='_blank'
+                            className='hover:text-gfl-link-green'
+                        >
+                            bsik.net
+                        </a>{' '}
+                        | Designed by Lubna Sarigat
+                    </p>
                 </div>
             </footer>
         </body>

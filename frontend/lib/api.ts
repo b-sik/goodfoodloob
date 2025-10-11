@@ -26,14 +26,14 @@ export async function fetchPost(
     postType: PostType = 'posts'
 ): Promise<Post | null> {
     try {
-        const res = await fetch(`${API_URL}/${postType}/${id}`);
+        const res = await fetch(`${API_URL}/${postType}/${id}?_embed`);
 
-        if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
+        if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 
         const posts = await res.json();
         return posts;
     } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error fetching post:', error);
         return null;
     }
 }
