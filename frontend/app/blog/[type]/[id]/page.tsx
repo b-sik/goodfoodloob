@@ -1,4 +1,4 @@
-import './blog.css';
+import '@/app/blog/[type]/[id]/blog.css';
 import { fetchPost, fetchPosts } from '@/lib/api';
 import type { Post } from '@/lib/types';
 import { humanReadableDate } from '@/lib/util';
