@@ -25,8 +25,6 @@ export default async function BlogPage({
     const { id, type } = await params;
     const post = await fetchPost(id, type);
 
-    const feauturedImg = post?._embedded['wp:featuredmedia'][0].source_url;
-
     return (
         <main className='blog-post bg-gfl-white'>
             {post ? (
@@ -44,7 +42,8 @@ export default async function BlogPage({
                         </small>
                     </div>
                     <div className='max-h-[400px] mb-14'>
-                        {feauturedImg ? (
+                        {post?._embedded?.['wp:featuredmedia']?.[0]
+                            ?.source_url ? (
                             <img
                                 src={`${post?._embedded['wp:featuredmedia'][0].source_url}`}
                                 className='max-h-100 h-[400px] max-w-100 m-auto'
