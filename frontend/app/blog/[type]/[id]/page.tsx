@@ -1,4 +1,3 @@
-import '@/app/blog/[type]/[id]/blog.css';
 import { fetchPost, fetchPosts } from '@/lib/api';
 import type { Post } from '@/lib/types';
 import { humanReadableDate } from '@/lib/util';
@@ -26,10 +25,10 @@ export default async function BlogPage({
     const { id, type } = await params;
     const post = await fetchPost(id, type);
 
-    console.log({ post });
+    const feauturedImg = post?._embedded['wp:featuredmedia'][0].source_url;
 
     return (
-        <main className='bg-gfl-white'>
+        <main className='blog-post bg-gfl-white'>
             {post ? (
                 <section className='min-h-[calc(100vh-80px)] text-center p-10 md:p-20 flex flex-col justify-center align-middle'>
                     <h1 className='text-5xl'>{post.title.rendered}</h1>
@@ -45,10 +44,12 @@ export default async function BlogPage({
                         </small>
                     </div>
                     <div className='max-h-[400px] mb-14'>
-                        <img
-                            src={`${post?._embedded['wp:featuredmedia'][0].source_url}`}
-                            className='max-h-100 h-[400px] max-w-100 m-auto'
-                        />
+                        {feauturedImg ? (
+                            <img
+                                src={`${post?._embedded['wp:featuredmedia'][0].source_url}`}
+                                className='max-h-100 h-[400px] max-w-100 m-auto'
+                            />
+                        ) : null}
                     </div>
                     <div
                         className='text-left'
