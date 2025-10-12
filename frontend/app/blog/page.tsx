@@ -18,28 +18,32 @@ export default async function Blog() {
     return (
         <main>
             <section className='bg-gfl-red text-gfl-white flex flex-col lg:grid lg:grid-cols-2 py-8 min-h-[calc(100vh-80px)] items-center'>
-                <div className='flex flex-col justify-center text-center g:text-right max-w-96 justify-self-end lg:pr-20'>
-                    <div className='mb-8 lg:mb-16'>
-                        <p
-                            className='inline px-4 py-2 rounded-md font-bold text-base'
-                            style={{
-                                background:
-                                    'linear-gradient(172.45deg, #7FB3F8 2.81%, #C0B7FA 101.9%)',
-                            }}
-                        >
-                            New post!
-                        </p>
-                    </div>
-                    <h1 className='text-4xl mb-8'>
-                        {recipePosts[0].title.rendered}
-                    </h1>
-                    <p className='mb-8 text-lg'>
-                        {excerpt(recipePosts[0].excerpt.rendered)}...
-                    </p>
-                </div>
-                <div>
-                    <PostCard post={recipePosts[0]} size='large' />
-                </div>
+                {recipePosts?.[0] && (
+                    <>
+                        <div className='flex flex-col justify-center text-center g:text-right max-w-96 justify-self-end lg:pr-20'>
+                            <div className='mb-8 lg:mb-16'>
+                                <p
+                                    className='inline px-4 py-2 rounded-md font-bold text-base'
+                                    style={{
+                                        background:
+                                            'linear-gradient(172.45deg, #7FB3F8 2.81%, #C0B7FA 101.9%)',
+                                    }}
+                                >
+                                    New post!
+                                </p>
+                            </div>
+                            <h1 className='text-4xl mb-8'>
+                                {recipePosts[0].title.rendered}
+                            </h1>
+                            <p className='mb-8 text-lg'>
+                                {excerpt(recipePosts[0].excerpt.rendered)}...
+                            </p>
+                        </div>
+                        <div>
+                            <PostCard post={recipePosts[0]} size='large' />
+                        </div>
+                    </>
+                )}
             </section>
 
             <section
@@ -51,7 +55,7 @@ export default async function Blog() {
                     <Button color='black' label='View All Recipes' />
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
-                    {recipePosts.map((post, i) =>
+                    {recipePosts?.map((post, i) =>
                         i !== 0 ? (
                             <PostCard key={post.slug} post={post} />
                         ) : null
@@ -70,7 +74,7 @@ export default async function Blog() {
                     <Button color='black' label='View All Events' />
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
-                    {eventPosts.map((post) => (
+                    {eventPosts?.map((post) => (
                         <PostCard key={post.slug} post={post} />
                     ))}
                 </ul>
@@ -87,7 +91,7 @@ export default async function Blog() {
                     <Button color='black' label='View All Posts' />
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
-                    {blogPosts.map((post) => (
+                    {blogPosts?.map((post) => (
                         <PostCard key={post.slug} post={post} />
                     ))}
                 </ul>
