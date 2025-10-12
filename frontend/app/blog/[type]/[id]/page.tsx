@@ -3,6 +3,8 @@ import type { Post } from '@/lib/types';
 import { humanReadableDate } from '@/lib/util';
 import Link from 'next/link';
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
     const blogPosts: Post[] = await fetchPosts('posts', 100);
     const recipePosts: Post[] = await fetchPosts('recipes', 100);
