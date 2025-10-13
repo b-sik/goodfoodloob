@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
+        "build:server": "SKIP_NEXT_CHECKS=true next build",
         "start": "next start",
         "lint": "next lint",
         "secure": "next dev --experimental-https"

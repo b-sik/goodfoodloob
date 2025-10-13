@@ -22,13 +22,15 @@ use GoodFoodLoob\DB;
 use GoodFoodLoob\PostTypes;
 use GoodFoodLoob\Routes;
 
-class GoodFoodLoob {
+class GoodFoodLoob
+{
     /**
      * Initialize plugin.
      *
      * @return void
      */
-    public static function init(): void {
+    public static function init(): void
+    {
         register_activation_hook(__FILE__, [DB::class, 'create']);
 
         add_action('publish_post', [self::class, 'revalidate'], 10, 2);
@@ -37,12 +39,19 @@ class GoodFoodLoob {
         Routes::init();
     }
 
-    public static function revalidate($post_ID, $post, $update): void {
-        if (!in_array($post->post_type, ['post', 'recipes', 'events'])) return;
+    public static function revalidate($post_ID, $post, $update): void
+    {
+        if (!in_array($post->post_type, ['post', 'recipes', 'events'])) {
+            return;
+        }
 
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
 
-        if ($post->post_status !== 'publish') return;
+        if ($post->post_status !== 'publish') {
+            return;
+        }
 
         $path = '/blog/' . ($post->post_type === 'post' ? 'posts' : $post->post_type) . '/' . $post_ID;
         $secret = 'qrxh0D7TVTqzT3r3uMyn';
