@@ -39,7 +39,7 @@ class GoodFoodLoob
         Routes::init();
     }
 
-    public static function revalidate($post_ID, $post, $update): void
+    public static function revalidate($post_ID, $post): void
     {
         if (!in_array($post->post_type, ['post', 'recipes', 'events'])) {
             return;
