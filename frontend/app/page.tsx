@@ -59,17 +59,17 @@ export default async function Home() {
                             alt='Delicious food'
                             className='lg:hidden rounded-2xl mb-8'
                         />
-                        <h2 className='text-4xl mb-8'>
-                            {recipePost[0].title.rendered}
-                        </h2>
-                        <p className='mb-8'>
-                            {excerpt(recipePost[0].excerpt.rendered)}...
-                        </p>
-                        <Button
-                            color='green'
-                            label='View recipe'
-                            href='/blog#recipes'
-                        />
+                        {recipePost?.[0] && (
+                            <>
+                                <h2 className='text-4xl mb-8'>
+                                    {recipePost[0].title.rendered}
+                                </h2>
+                                <p className='mb-8'>
+                                    {excerpt(recipePost[0].excerpt.rendered)}...
+                                </p>
+                            </>
+                        )}
+                        color='green' label='View recipe' href='/blog#recipes'
                     </div>
                 </SectionContentLeft>
 
@@ -106,13 +106,17 @@ export default async function Home() {
                             alt='Delicious food'
                             className='lg:hidden rounded-2xl mb-8'
                         />
-                        <h2 className='text-4xl mb-8'>
-                            {eventPost[0].title.rendered}
-                        </h2>
-                        <p className='mb-8'>
-                            {excerpt(eventPost[0].excerpt.rendered)}
-                            ...
-                        </p>
+                        {eventPost?.[0] && (
+                            <>
+                                <h2 className='text-4xl mb-8'>
+                                    {eventPost[0].title.rendered}
+                                </h2>
+                                <p className='mb-8'>
+                                    {excerpt(eventPost[0].excerpt.rendered)}
+                                    ...
+                                </p>
+                            </>
+                        )}
                         <Button
                             color='green'
                             label='View event'
