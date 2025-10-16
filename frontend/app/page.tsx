@@ -67,9 +67,13 @@ export default async function Home() {
                                 <p className='mb-8'>
                                     {excerpt(recipePost[0].excerpt.rendered)}...
                                 </p>
+                                <Button
+                                    color='green'
+                                    label='View recipe'
+                                    href='/blog#recipes'
+                                />
                             </>
                         )}
-                        color='green' label='View recipe' href='/blog#recipes'
                     </div>
                 </SectionContentLeft>
 
