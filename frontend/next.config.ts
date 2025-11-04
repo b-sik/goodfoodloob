@@ -4,6 +4,9 @@ const isServerBuild = process.env.SKIP_NEXT_CHECKS === 'true';
 
 const nextConfig: NextConfig = {
     trailingSlash: true,
+    experimental: {
+        webpackMemoryOptimizations: true,
+    },
     images: {
         unoptimized: true,
     },
