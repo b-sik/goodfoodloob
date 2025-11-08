@@ -25,7 +25,12 @@ export default async function BlogPage({
     }>;
 }) {
     const { id, type } = await params;
-    const post = await fetchPost(id, type);
+    const post = await fetchPost(id, type, [
+        'title',
+        'date_gmt',
+        '_embedded',
+        'content',
+    ]);
 
     return (
         <main className='blog-post bg-gfl-white'>

@@ -4,12 +4,17 @@ const API_URL = process.env.API_URL;
 
 export async function fetchPosts(
     postType: PostType,
-    perPage: number = 10
+    perPage: number = 10,
+    fields: string[] = []
 ): Promise<Post[]> {
+    let url = `${API_URL}/${postType}?_embed&per_page=${perPage}`;
+
+    if (fields.length > 0) {
+        url += `&fields=${fields.join(',')}`;
+    }
+
     try {
-        const res = await fetch(
-            `${API_URL}/${postType}?_embed&per_page=${perPage}`
-        );
+        const res = await fetch(url);
 
         if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
 
@@ -23,10 +28,17 @@ export async function fetchPosts(
 
 export async function fetchPost(
     id: string,
-    postType: PostType = 'posts'
+    postType: PostType = 'posts',
+    fields: string[] = []
 ): Promise<Post | null> {
+    let url = `${API_URL}/${postType}/${id}?_embed`;
+
+    if (fields.length > 0) {
+        url += `&fields=${fields.join(',')}`;
+    }
+
     try {
-        const res = await fetch(`${API_URL}/${postType}/${id}?_embed`);
+        const res = await fetch(url);
 
         if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 
