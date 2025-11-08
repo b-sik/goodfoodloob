@@ -1,10 +1,14 @@
+// @ts-expect-error no types for 'he'
+import he from 'he';
+
 /**
  * Strips p tag to make styling easier.
+ * Decodes html entities.
  * @param {string} str
  * @returns {string}
  */
 export function excerpt(str: string): string {
-    return str.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 100);
+    return he.decode(str.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 100));
 }
 
 /**
