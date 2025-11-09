@@ -12,22 +12,31 @@ export const metadata: Metadata = {
 
 export default async function Blog() {
     const blogPosts: Post[] = await fetchPosts('posts', 4, [
+        'id',
         'title',
+        'type',
         'slug',
         'excerpt',
         '_embedded',
+        '_links',
     ]);
     const recipePosts: Post[] = await fetchPosts('recipes', 5, [
+        'id',
         'title',
+        'type',
         'slug',
         'excerpt',
         '_embedded',
+        '_links',
     ]);
     const eventPosts: Post[] = await fetchPosts('events', 4, [
+        'id',
         'title',
+        'type',
         'slug',
         'excerpt',
         '_embedded',
+        '_links',
     ]);
 
     return (

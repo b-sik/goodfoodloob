@@ -10,9 +10,9 @@ export async function fetchPosts(
     let url = `${API_URL}/${postType}?_embed&per_page=${perPage}`;
 
     if (fields.length > 0) {
-        url += `&fields=${fields.join(',')}`;
+        url += `&_fields=${fields.join(',')}`;
     }
-
+    console.log(url);
     try {
         const res = await fetch(url);
 
@@ -34,8 +34,10 @@ export async function fetchPost(
     let url = `${API_URL}/${postType}/${id}?_embed`;
 
     if (fields.length > 0) {
-        url += `&fields=${fields.join(',')}`;
+        url += `&_fields=${fields.join(',')}`;
     }
+
+    console.log(url);
 
     try {
         const res = await fetch(url);
