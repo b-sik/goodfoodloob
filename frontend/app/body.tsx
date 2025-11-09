@@ -92,7 +92,7 @@ export default function Body({
                     <p>
                         Built by{' '}
                         <a
-                            href='bsik'
+                            href='https://bsik.net'
                             target='_blank'
                             className='hover:text-gfl-link-green'
                         >

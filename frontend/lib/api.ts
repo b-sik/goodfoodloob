@@ -12,6 +12,7 @@ export async function fetchPosts(
     if (fields.length > 0) {
         url += `&_fields=${fields.join(',')}`;
     }
+
     console.log(url);
     try {
         const res = await fetch(url);
@@ -36,8 +37,6 @@ export async function fetchPost(
     if (fields.length > 0) {
         url += `&_fields=${fields.join(',')}`;
     }
-
-    console.log(url);
 
     try {
         const res = await fetch(url);

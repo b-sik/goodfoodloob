@@ -4,6 +4,7 @@ import type { Post } from '@/lib/types';
 import PostCard from '@/components/PostCard';
 import Button from '@/components/Button';
 import { excerpt } from '@/lib/util';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: 'Good Food Loob - I like to eat, cook, and talk about good food!',
@@ -76,7 +77,9 @@ export default async function Blog() {
             >
                 <div className='flex flex-col lg:flex-row items-center w-3/5 justify-between mb-10'>
                     <h1 className='uppercase text-4xl mb-4 lg:mb-0'>Recipes</h1>
-                    <Button color='black' label='View All Recipes' />
+                    <Link href='/blog/recipes'>
+                        <Button color='black' label='View All Recipes' />
+                    </Link>
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
                     {recipePosts?.map((post, i) =>
@@ -95,7 +98,9 @@ export default async function Blog() {
                     <h1 className='uppercase text-4xl text-gfl-white mb-4 lg:mb-0'>
                         Events
                     </h1>
-                    <Button color='black' label='View All Events' />
+                    <Link href='/blog//events'>
+                        <Button color='black' label='View All Events' />
+                    </Link>
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
                     {eventPosts?.map((post) => (
@@ -112,7 +117,9 @@ export default async function Blog() {
                     <h1 className='uppercase text-4xl mb-4 lg:mb-0'>
                         Insights
                     </h1>
-                    <Button color='black' label='View All Posts' />
+                    <Link href='/blog/posts'>
+                        <Button color='black' label='View All Posts' />
+                    </Link>
                 </div>
                 <ul className='text-center grid lg:grid-cols-2 gap-8 justify-center'>
                     {blogPosts?.map((post) => (
