@@ -98,7 +98,7 @@ export default async function Blog() {
                     <h1 className='uppercase text-4xl text-gfl-white mb-4 lg:mb-0'>
                         Events
                     </h1>
-                    <Link href='/blog//events'>
+                    <Link href='/blog/events'>
                         <Button color='black' label='View All Events' />
                     </Link>
                 </div>

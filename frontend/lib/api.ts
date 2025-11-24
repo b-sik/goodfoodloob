@@ -13,7 +13,6 @@ export async function fetchPosts(
         url += `&_fields=${fields.join(',')}`;
     }
 
-    console.log(url);
     try {
         const res = await fetch(url);
 
@@ -30,21 +29,38 @@ export async function fetchPosts(
 export async function fetchPost(
     id: string,
     postType: PostType = 'posts',
-    fields: string[] = []
+    fields: string[] = [],
+    isPreview: boolean = false
 ): Promise<Post | null> {
     let url = `${API_URL}/${postType}/${id}?_embed`;
+
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+    };
 
     if (fields.length > 0) {
         url += `&_fields=${fields.join(',')}`;
     }
 
+    if (isPreview) {
+        url += '&status=any';
+
+        const auth = Buffer.from(
+            `${process.env.WP_PREVIEW_USER}:${process.env.WP_PREVIEW_PASSWORD}`
+        ).toString('base64');
+        headers['Authorization'] = `Basic ${auth}`;
+    }
+
     try {
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            headers,
+            cache: isPreview ? 'no-cache' : 'force-cache',
+        });
 
         if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 
-        const posts = await res.json();
-        return posts;
+        const post = await res.json();
+        return post;
     } catch (error) {
         console.error('Error fetching post:', error);
         return null;

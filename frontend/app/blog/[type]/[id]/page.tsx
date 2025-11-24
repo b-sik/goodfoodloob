@@ -2,13 +2,17 @@ import { fetchPost, fetchPosts } from '@/lib/api';
 import type { Post } from '@/lib/types';
 import { humanReadableDate } from '@/lib/util';
 import Link from 'next/link';
+import { draftMode } from 'next/headers';
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-    const blogPosts: Post[] = await fetchPosts('posts', 100);
-    const recipePosts: Post[] = await fetchPosts('recipes', 100);
-    const eventPosts: Post[] = await fetchPosts('events', 100);
+    const blogPosts: Post[] = await fetchPosts('posts', 100, ['id', 'type']);
+    const recipePosts: Post[] = await fetchPosts('recipes', 100, [
+        'id',
+        'type',
+    ]);
+    const eventPosts: Post[] = await fetchPosts('events', 100, ['id', 'type']);
 
     return [...blogPosts, ...recipePosts, ...eventPosts].map((post) => ({
         id: post.id.toString(),
@@ -24,16 +28,26 @@ export default async function BlogPage({
         type: string;
     }>;
 }) {
+    const { isEnabled } = await draftMode();
+
     const { id, type } = await params;
-    const post = await fetchPost(id, type, [
-        'title',
-        'date_gmt',
-        '_embedded',
-        'content',
-    ]);
+
+    let post;
+    if (process.env.WP_PREVIEW_SECRET && typeof window === 'undefined') {
+        const previewUrl = `https://goodfoodloob.com/api/preview?secret=${process.env.WP_PREVIEW_SECRET}&id=${id}&type=${type}`;
+        post = await fetch(previewUrl).then((res) => res.json());
+    } else {
+        post = await fetchPost(
+            id,
+            type,
+            ['title', 'date_gmt', '_embedded', 'content'],
+            isEnabled
+        );
+    }
 
     return (
         <main className='blog-post bg-gfl-white'>
+            {isEnabled && <code>preview mode</code>}
             {post ? (
                 <section className='min-h-[calc(100vh-80px)] text-center p-10 md:p-20 flex flex-col justify-center align-middle'>
                     <h1 className='text-5xl'>{post.title.rendered}</h1>
