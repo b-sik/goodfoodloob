@@ -2,15 +2,13 @@ import { fetchPost } from '@/lib/api';
 import { draftMode } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-const PREVIEW_SECRET = process.env.PREVIEW_SECRET;
-
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const secret = searchParams.get('secret');
-    const type = searchParams.get('type');
+    let type = searchParams.get('type');
     const id = searchParams.get('id');
 
-    if (secret !== PREVIEW_SECRET) {
+    if (secret !== process.env.PREVIEW_SECRET) {
         return NextResponse.json(
             { message: 'Invalid secret' },
             { status: 401 }
@@ -26,12 +24,15 @@ export async function GET(req: NextRequest) {
 
     if (!type) {
         return NextResponse.json(
-            { message: 'Missing post type.' },
+            { message: 'Missing post type' },
             { status: 400 }
         );
     }
 
-    const post = await fetchPost(id, type);
+    const draft = await draftMode();
+    draft.enable();
+
+    const post = await fetchPost(id, type, ['id']);
 
     if (!post) {
         return NextResponse.json(
@@ -40,8 +41,5 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    const draft = await draftMode();
-    draft.enable();
-
-    return NextResponse.redirect(`/blog/${type}/${id}`);
+    return NextResponse.redirect(`${process.env.FE_URL}/blog/${type}/${id}`);
 }

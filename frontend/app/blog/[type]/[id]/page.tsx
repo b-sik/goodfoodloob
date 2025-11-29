@@ -28,7 +28,9 @@ export default async function BlogPage({
         type: string;
     }>;
 }) {
-    const { isEnabled } = await draftMode();
+    const draft = await draftMode();
+    const isPreview = draft.isEnabled;
+
     const { id, type } = await params;
 
     let post = await fetchPost(id, type, [
@@ -38,9 +40,13 @@ export default async function BlogPage({
         'content',
     ]);
 
+    if (isPreview) {
+        draft.disable();
+    }
+
     return (
         <main className='blog-post bg-gfl-white'>
-            {isEnabled && <code>preview mode</code>}
+            {isPreview && <code>preview mode</code>}
             {post ? (
                 <section className='min-h-[calc(100vh-80px)] text-center p-10 md:p-20 flex flex-col justify-center align-middle'>
                     <h1 className='text-5xl'>{post.title.rendered}</h1>

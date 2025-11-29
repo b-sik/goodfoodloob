@@ -32,29 +32,29 @@ export async function fetchPost(
     postType: PostType = 'posts',
     fields: string[] = []
 ): Promise<Post | null> {
-    const { isEnabled } = await draftMode();
+    const draft = await draftMode();
+    const isPreview = draft.isEnabled;
 
     let url = `${API_URL}/${postType}/${id}?_embed`;
 
-    // const headers: HeadersInit = {
-    //     'Content-Type': 'application/json',
-    // };
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+    };
 
     if (fields.length > 0) {
         url += `&_fields=${fields.join(',')}`;
     }
 
-    if (isEnabled) {
-        url += '&status=any';
+    if (isPreview) {
+        url += '&status=draft';
 
-        // const auth = Buffer.from(
-        //     `${process.env.PREVIEW_USER}:${process.env.PREVIEW_PASSWORD}`
-        // ).toString('base64');
-        // headers['Authorization'] = `Basic ${auth}`;
+        headers['Authorization'] = `Basic ${btoa(
+            `${process.env.PREVIEW_USER}:${process.env.PREVIEW_APP_PW}`
+        )}`;
     }
 
     try {
-        const res = await fetch(url);
+        const res = await fetch(url, headers);
 
         if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 
