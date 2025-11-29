@@ -6,8 +6,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Routes {
-    public static function init(): void {
+class Routes
+{
+    public static function init(): void
+    {
         /**
          * Register endpoint.
          */
@@ -20,7 +22,8 @@ class Routes {
         });
     }
 
-    public static function handle_signup($request) {
+    public static function handle_signup($request)
+    {
         global $wpdb;
 
         $params = $request->get_json_params();

@@ -6,13 +6,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class PostTypes {
-    public static function init(): void {
+class PostTypes
+{
+    public static function init(): void
+    {
         add_action('init', [self::class, 'recipes_cpt'], 0);
         add_action('init', [self::class, 'events_cpt'], 0);
     }
 
-    public static function recipes_cpt() {
+    public static function recipes_cpt()
+    {
         $labels = array(
             'name'                  => _x('Recipes', 'Post Type General Name', 'gfl'),
             'singular_name'         => _x('Recipe', 'Post Type Singular Name', 'gfl'),
@@ -61,14 +64,16 @@ class PostTypes {
             'has_archive'           => true,
             'exclude_from_search'   => false,
             'publicly_queryable'    => true,
-            'capability_type'       => 'page',
+            'capability_type'       => 'post',
             'show_in_rest'          => true,
+            'map_meta_cap'          => true
         );
 
         register_post_type('recipes', $args);
     }
 
-    public static function events_cpt() {
+    public static function events_cpt()
+    {
         $labels = array(
             'name'                  => _x('Events', 'Post Type General Name', 'gfl'),
             'singular_name'         => _x('Event', 'Post Type Singular Name', 'gfl'),
@@ -117,8 +122,9 @@ class PostTypes {
             'has_archive'           => true,
             'exclude_from_search'   => false,
             'publicly_queryable'    => true,
-            'capability_type'       => 'page',
+            'capability_type'       => 'post',
             'show_in_rest'          => true,
+            'map_meta_cap'          => true
         );
 
         register_post_type('events', $args);
