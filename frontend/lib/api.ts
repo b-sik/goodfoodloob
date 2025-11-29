@@ -1,4 +1,5 @@
 import type { Post, PostType } from './types';
+import { draftMode } from 'next/headers';
 
 const API_URL = process.env.API_URL;
 
@@ -29,33 +30,31 @@ export async function fetchPosts(
 export async function fetchPost(
     id: string,
     postType: PostType = 'posts',
-    fields: string[] = [],
-    isPreview: boolean = false
+    fields: string[] = []
 ): Promise<Post | null> {
+    const { isEnabled } = await draftMode();
+
     let url = `${API_URL}/${postType}/${id}?_embed`;
 
-    const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-    };
+    // const headers: HeadersInit = {
+    //     'Content-Type': 'application/json',
+    // };
 
     if (fields.length > 0) {
         url += `&_fields=${fields.join(',')}`;
     }
 
-    if (isPreview) {
+    if (isEnabled) {
         url += '&status=any';
 
-        const auth = Buffer.from(
-            `${process.env.WP_PREVIEW_USER}:${process.env.WP_PREVIEW_PASSWORD}`
-        ).toString('base64');
-        headers['Authorization'] = `Basic ${auth}`;
+        // const auth = Buffer.from(
+        //     `${process.env.PREVIEW_USER}:${process.env.PREVIEW_PASSWORD}`
+        // ).toString('base64');
+        // headers['Authorization'] = `Basic ${auth}`;
     }
 
     try {
-        const res = await fetch(url, {
-            headers,
-            cache: isPreview ? 'no-cache' : 'force-cache',
-        });
+        const res = await fetch(url);
 
         if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 

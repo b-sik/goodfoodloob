@@ -29,21 +29,14 @@ export default async function BlogPage({
     }>;
 }) {
     const { isEnabled } = await draftMode();
-
     const { id, type } = await params;
 
-    let post;
-    if (process.env.WP_PREVIEW_SECRET && typeof window === 'undefined') {
-        const previewUrl = `https://goodfoodloob.com/api/preview?secret=${process.env.WP_PREVIEW_SECRET}&id=${id}&type=${type}`;
-        post = await fetch(previewUrl).then((res) => res.json());
-    } else {
-        post = await fetchPost(
-            id,
-            type,
-            ['title', 'date_gmt', '_embedded', 'content'],
-            isEnabled
-        );
-    }
+    let post = await fetchPost(id, type, [
+        'title',
+        'date_gmt',
+        '_embedded',
+        'content',
+    ]);
 
     return (
         <main className='blog-post bg-gfl-white'>
