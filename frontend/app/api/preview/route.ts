@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     const draft = await draftMode();
     draft.enable();
 
-    const post = await fetchPost(id, type, ['id']);
+    const post = await fetchPost(id, type, ['id'], true);
 
     if (!post) {
         return NextResponse.json(

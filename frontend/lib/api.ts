@@ -30,11 +30,9 @@ export async function fetchPosts(
 export async function fetchPost(
     id: string,
     postType: PostType = 'posts',
-    fields: string[] = []
+    fields: string[] = [],
+    isPreview: boolean = false
 ): Promise<Post | null> {
-    const draft = await draftMode();
-    const isPreview = draft.isEnabled;
-
     let url = `${API_URL}/${postType}/${id}?_embed`;
 
     const headers: HeadersInit = {
