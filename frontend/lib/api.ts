@@ -52,7 +52,7 @@ export async function fetchPost(
     }
 
     try {
-        const res = await fetch(url, headers);
+        const res = await fetch(url, { headers });
 
         if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
 

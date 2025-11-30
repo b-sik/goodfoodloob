@@ -33,12 +33,12 @@ export default async function BlogPage({
 
     const { id, type } = await params;
 
-    let post = await fetchPost(id, type, [
-        'title',
-        'date_gmt',
-        '_embedded',
-        'content',
-    ]);
+    let post = await fetchPost(
+        id,
+        type,
+        ['title', 'date_gmt', '_embedded', 'content'],
+        isPreview
+    );
 
     if (isPreview) {
         draft.disable();
