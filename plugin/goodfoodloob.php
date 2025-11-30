@@ -37,35 +37,16 @@ class GoodFoodLoob
         register_activation_hook(__FILE__, [DB::class, 'create']);
 
         add_action('publish_post', [self::class, 'revalidate'], 10, 2);
-        add_action('init', [self::class, 'register_filters']);
+        add_filter('preview_post_link', [self::class, 'preview_draft_link'], 10, 2);
 
-        add_filter('rest_prepare_recipes', function ($response, $post, $request) {
-            $data = $response->get_data();
-
-            $data['link'] = add_query_arg([
-            'secret' => $_ENV['PREVIEW_SECRET'],
-            'id' => $post->ID,
-            'type' => $post->post_type === 'post' ? 'posts' : $post->post_type,
-            ], $_ENV['FRONTEND_URL'] . '/api/preview');
-
-            $response->set_data($data);
-            return $response;
-        }, 10, 3);
+        // https://github.com/WordPress/gutenberg/issues/13998
+        add_filter('rest_prepare_post', [self::class, 'modify_preview_link_if_draft'], 10, 3);
+        add_filter('rest_prepare_recipes', [self::class, 'modify_preview_link_if_draft'], 10, 3);
+        add_filter('rest_prepare_events', [self::class, 'modify_preview_link_if_draft'], 10, 3);
 
         PostTypes::init();
         Routes::init();
     }
-
-    public static function register_filters(): void
-    {
-        add_filter('preview_post_link', [self::class, 'preview_draft'], 10, 2);
-    }
-
-    public static function register_rest_filters(): void
-    {
-        add_filter('rest_prepare_post', [self::class, 'preview_draft_rest'], 10, 3);
-    }
-
 
     public static function revalidate($post_ID, $post): void
     {
@@ -86,32 +67,32 @@ class GoodFoodLoob
         wp_remote_get($_ENV['FRONTEND_URL'] . "/api/revalidate?secret={$_ENV['REVALIDATE_SECRET']}&path={$path}");
     }
 
-    public static function preview_draft($preview_link, $post)
+    public static function preview_draft_link($preview_link, $post)
     {
-        $preview_url =  add_query_arg([
-        'secret' => $_ENV['PREVIEW_SECRET'],
-        'id' => $post->ID,
-        'type' => $post->post_type === 'post' ? 'posts' : $post->post_type
+        return add_query_arg([
+            'secret' => $_ENV['PREVIEW_SECRET'],
+            'nonce' => wp_create_nonce('wp_rest'),
+            'id' => $post->ID,
+            'type' => $post->post_type === 'post' ? 'posts' : $post->post_type
         ], $_ENV['FRONTEND_URL'] . '/api/preview');
-
-        error_log('Preview URL: ' . $preview_url);
-
-        return $preview_url;
     }
 
-    // public static function preview_draft_rest($response, $post, $request)
-    // {
-    //     $data = $response->get_data();
+    public static function modify_preview_link_if_draft($response, $post, $request)
+    {
+        if ($request->get_param('context') === 'edit' && $post->post_status === 'draft') {
+            $data = $response->get_data();
 
-    //     $data['preview_link'] = add_query_arg([
-    //     'secret' => $_ENV['PREVIEW_SECRET'],
-    //     'id'   => $post->ID,
-    //     'type'   => $post->post_type === 'post' ? 'posts' : $post->post_type,
-    //     ], $_ENV['FRONTEND_URL'] . '/api/preview');
+            $data['link'] = add_query_arg([
+                'secret' => $_ENV['PREVIEW_SECRET'],
+                'nonce' => wp_create_nonce('wp_rest'),
+                'id' => $post->ID,
+                'type' => $post->post_type === 'post' ? 'posts' : $post->post_type
+            ], $_ENV['FRONTEND_URL'] . '/api/preview');
 
-    //     $response->set_data($data);
-    //     return $response;
-    // }
+            $response->set_data($data);
+        }
+        return $response;
+    }
 }
 
 add_action('plugins_loaded', ['GoodFoodLoob\GoodFoodLoob', 'init']);
